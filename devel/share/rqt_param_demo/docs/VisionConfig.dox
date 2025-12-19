@@ -1,0 +1,8 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~conf_threshold" : \b [double] YOLO confidence threshold min: 0.0, default: 0.5, max: 1.0
+- \b "~iou_threshold" : \b [double] NMS IoU threshold min: 0.0, default: 0.45, max: 1.0
+- \b "~enable_detection" : \b [bool] Enable YOLO detection min: False, default: True, max: True
+

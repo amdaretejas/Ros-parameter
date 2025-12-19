@@ -1,0 +1,10 @@
+\subsubsection usage Usage
+\verbatim
+<node name="motion_controller" pkg="rqt_param_demo" type="motion_controller">
+  <param name="linear_speed" type="double" value="0.5" />
+  <param name="angular_speed" type="double" value="1.0" />
+  <param name="acceleration_limit" type="double" value="1.0" />
+  <param name="enable_motion" type="bool" value="True" />
+</node>
+\endverbatim
+

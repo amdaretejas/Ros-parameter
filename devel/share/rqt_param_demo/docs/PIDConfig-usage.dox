@@ -1,0 +1,10 @@
+\subsubsection usage Usage
+\verbatim
+<node name="pid_controller" pkg="rqt_param_demo" type="pid_controller">
+  <param name="kp" type="double" value="1.0" />
+  <param name="ki" type="double" value="0.0" />
+  <param name="kd" type="double" value="0.1" />
+  <param name="target" type="double" value="10.0" />
+</node>
+\endverbatim
+

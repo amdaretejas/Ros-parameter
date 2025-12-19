@@ -1,0 +1,9 @@
+\subsubsection usage Usage
+\verbatim
+<node name="vision" pkg="rqt_param_demo" type="vision">
+  <param name="conf_threshold" type="double" value="0.5" />
+  <param name="iou_threshold" type="double" value="0.45" />
+  <param name="enable_detection" type="bool" value="True" />
+</node>
+\endverbatim
+
