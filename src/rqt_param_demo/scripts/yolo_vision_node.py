@@ -8,6 +8,8 @@ from dynamic_reconfigure.server import Server
 from rqt_param_demo.cfg import VisionConfig
 
 from ultralytics import YOLO
+from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithPose
+from geometry_msgs.msg import Pose2D
 
 class YoloVisionNode:
 
@@ -30,6 +32,11 @@ class YoloVisionNode:
             self.image_cb,
             queue_size=1
         )
+        self.pub = rospy.Publisher(
+            "/yolo/detections",
+            Detection2DArray,
+            queue_size=10
+        )
 
         rospy.loginfo("YOLO Vision Node started")
         rospy.spin()
@@ -38,28 +45,62 @@ class YoloVisionNode:
         self.conf_thresh = config.conf_threshold
         self.iou_thresh = config.iou_threshold
         self.enabled = config.enable_detection
-
-        rospy.loginfo(
-            f"[RECONF] conf={self.conf_thresh}, iou={self.iou_thresh}, enabled={self.enabled}"
-        )
         return config
 
-    def image_cb(self, msg):
-        if not self.enabled:
-            return
+        # self.conf_thresh = config.conf_threshold
+        # self.iou_thresh = config.iou_threshold
+        # self.enabled = config.enable_detection
 
-        frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        # rospy.loginfo(
+        #     f"[RECONF] conf={self.conf_thresh}, iou={self.iou_thresh}, enabled={self.enabled}"
+        # )
+        # return config
 
-        results = self.model(
-            frame,
-            conf=self.conf_thresh,
-            iou=self.iou_thresh,
-            verbose=False
-        )
+    def image_cb(self, msg, results):
 
-        annotated = results[0].plot()
-        cv2.imshow("YOLO Detection", annotated)
-        cv2.waitKey(1)
+        detections_msg = Detection2DArray()
+        detections_msg.header = msg.header
+
+        for box in results[0].boxes:
+            conf = float(box.conf[0])
+            cls_id = int(box.cls[0])
+
+            x1, y1, x2, y2 = box.xyxy[0]
+            cx = float((x1 + x2) / 2.0)
+            cy = float((y1 + y2) / 2.0)
+            w = float(x2 - x1)
+            h = float(y2 - y1)
+
+            det = Detection2D()
+            det.bbox.center.x = cx
+            det.bbox.center.y = cy
+            det.bbox.size_x = w
+            det.bbox.size_y = h
+
+            hyp = ObjectHypothesisWithPose()
+            hyp.id = cls_id
+            hyp.score = conf
+
+            det.results.append(hyp)
+            detections_msg.detections.append(det)
+
+        self.pub.publish(detections_msg)
+
+        # if not self.enabled:
+        #     return
+
+        # frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+
+        # results = self.model(
+        #     frame,
+        #     conf=self.conf_thresh,
+        #     iou=self.iou_thresh,
+        #     verbose=False
+        # )
+
+        # annotated = results[0].plot()
+        # cv2.imshow("YOLO Detection", annotated)
+        # cv2.waitKey(1)
 
 
 if __name__ == "__main__":

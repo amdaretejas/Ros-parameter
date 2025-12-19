@@ -1,0 +1,5 @@
+yolo_vision_node:
+  conf_threshold: 0.55
+  iou_threshold: 0.45
+  enable_detection: true
+

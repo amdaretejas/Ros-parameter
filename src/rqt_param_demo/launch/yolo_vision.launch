@@ -1,0 +1,13 @@
+<launch>
+  <!-- Load tuned parameters -->
+  <rosparam file="$(find rqt_param_demo)/config/vision.yaml" command="load"/>
+
+  <!-- Start YOLO node -->
+  <node
+    pkg="rqt_param_demo"
+    type="yolo_vision_node.py"
+    name="yolo_vision_node"
+    output="screen"
+  />
+</launch>
+
