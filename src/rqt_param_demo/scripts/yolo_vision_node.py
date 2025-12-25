@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from quickdata import ParamStore
 import rospy
 import cv2
 from cv_bridge import CvBridge
@@ -18,13 +18,24 @@ class YoloVisionNode:
 
         self.bridge = CvBridge()
 
-        self.conf_thresh = 0.5
-        self.iou_thresh = 0.45
+        self.conf_thresh = 0
+        self.iou_thresh = 0
         self.enabled = True
+
+        self.store = ParamStore("params.db")
+        if self.store.get("yolo.conf_threshold") != None: 
+            self.conf_thresh = self.store.get("yolo.conf_threshold")
+        
+        if self.store.get("yolo.iou_threshold") != None:
+            self.iou_thresh = self.store.get("yolo.iou_threshold")
+
+        if self.store.get("yolo.enable_detection") != None:
+            self.enabled = self.store.get("yolo.enable_detection")
+
 
         self.model = YOLO("yolov8n.pt")  # change if needed
 
-        self.server = Server(VisionConfig, self.reconfig_cb)
+        # self.server = Server(VisionConfig, self.reconfig_cb)
 
         self.sub = rospy.Subscriber(
             "/camera/image_raw",
@@ -45,6 +56,9 @@ class YoloVisionNode:
         self.conf_thresh = config.conf_threshold
         self.iou_thresh = config.iou_threshold
         self.enabled = config.enable_detection
+        self.store.set("yolo.conf_threshold", config.conf_threshold)
+        self.store.set("yolo.iou_threshold", config.iou_threshold)
+        self.store.set("yolo.enable_detection", config.enable_detection)
         return config
 
         # self.conf_thresh = config.conf_threshold
