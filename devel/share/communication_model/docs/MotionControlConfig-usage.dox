@@ -1,0 +1,11 @@
+\subsubsection usage Usage
+\verbatim
+<node name="motion_controller" pkg="communication_model" type="motion_controller">
+  <param name="linear_speed" type="double" value="1.0" />
+  <param name="angular_speed" type="double" value="0.5" />
+  <param name="acceleration" type="double" value="2.0" />
+  <param name="deceleration" type="double" value="2.0" />
+  <param name="enable_motion" type="bool" value="True" />
+</node>
+\endverbatim
+

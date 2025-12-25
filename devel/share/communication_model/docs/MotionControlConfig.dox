@@ -1,0 +1,10 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~linear_speed" : \b [double] Linear speed min: 0.0, default: 1.0, max: 5.0
+- \b "~angular_speed" : \b [double] Angular speed min: 0.0, default: 0.5, max: 5.0
+- \b "~acceleration" : \b [double] Acceleration min: 0.0, default: 2.0, max: 10.0
+- \b "~deceleration" : \b [double] Deceleration min: 0.0, default: 2.0, max: 10.0
+- \b "~enable_motion" : \b [bool] Enable motion min: False, default: True, max: True
+
